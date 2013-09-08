@@ -1,0 +1,212 @@
+<?php
+
+/**
+ * Asap Console
+ */
+
+define('IS_CLI', PHP_SAPI == 'cli');
+
+if (!IS_CLI)
+	die('Asap Console car only be used in CLI mode');
+
+//putenv('ASAP_ENV=prod');
+putenv('ASAP_ENV=dev');
+
+require_once(DIRNAME(__FILE__) . '/../Core/Asap.php');
+Asap_Core_Asap::init();
+
+Asap_Console::init();
+
+
+class Asap_Console
+{
+	const LINE_LEN = 80;
+
+	static $COMMANDS;
+
+
+	public static function init()
+	{
+		self::$COMMANDS = array(
+			'help' => 'Show this message',
+			'clear-cache' => 'Clear the cache (file, APC, Memcache)',
+			'generate-model' => 'Generate one or more models from the database',
+			'send-emails' => 'Batch send emails stored in DB'
+		);
+
+		$argv = $_SERVER['argv'];
+		if (count($argv) == 1)
+			self::_action_help();
+
+		// Remove the script name
+		array_shift($argv);
+		// Get the command
+		$sCommand = array_shift($argv);
+
+		//self::_printHeader();
+
+		foreach (self::$COMMANDS as $sCmd => $sMsg)
+			if ($sCommand == $sCmd)
+			{
+				call_user_func_array('Asap_Console::_action_' . str_replace('-', '_', $sCommand), $argv);
+				exit;
+			}
+
+		if (strpos($sCommand, ':'))
+		{
+			list($sCont, $sAction) = explode(':', $sCommand);
+			$aParams = array();
+			foreach ($argv as $mVal)
+			{
+				if (strpos($mVal, '='))
+				{
+					list($sKey, $mValue) = explode('=', $mVal);
+					$aParams[$sKey] = $mValue;
+				}
+				else
+					$aParams[] = $mVal;
+			}
+			$GLOBALS['asap']->launchAction($sCont, $sAction, $aParams);
+			exit;
+		}
+
+		self::_commandNotFound($sCommand);
+	}
+
+
+
+
+
+	protected static function _action_send_emails($iAmount = 10)
+	{
+		if ($iAmount == '--help' || !is_numeric($iAmount))
+		{
+			echo self::_print('Usage: php asap send-emails [amount]');
+			echo self::_print('If amount is not specified, will use the configuration value');
+			exit;
+		}
+
+		require_once(ASAP_MAIN_DIR . 'Util/Mailer.php');
+		$iTotalSent = Asap_Util_Mailer::sendFromDB($iAmount);
+		if ($iTotalSent === false)
+			echo self::_print('Error while sending emails. Are you in dev environment? Have you activated in conf?');
+		else
+			echo self::_print($iTotalSent . ' emails sent');
+	}
+
+	protected static function _action_generate_model($sModel = '', $bForce = false)
+	{
+		if ($sModel == '--help')
+		{
+			echo self::_print('Usage: php asap generate-model [table [force]]');
+			echo self::_print('If table is not specified or equal to "", all models will be generated');
+			echo self::_print('If force is not specified or false, model will not be overwritten if existing');
+			exit;
+		}
+
+		require_once(ASAP_MAIN_DIR . 'Database/ModelGenerator.php');
+
+		$bForce = !empty($bForce);
+		if ($sModel == '--force')
+		{
+			$sModel = '';
+			$bForce = true;
+		}
+
+		Asap_Database_ModelGenerator::batch($sModel, $bForce);
+	}
+
+	protected static function _action_clear_cache($sWhat = 'all')
+	{
+		if ($sWhat == '--help')
+		{
+			echo self::_print('Usage: php asap clear-cache type');
+			echo self::_print('If type is not specified or equal to "", all cache types will be cleared');
+			echo self::_print('Parameter type can be: all, file, apc');
+			exit;
+		}
+
+		if (empty($sWhat))
+			$sWhat = 'all';
+
+		if ($sWhat == 'file' || $sWhat == 'all')
+		{
+			echo self::_print('Removing File cache...');
+			$oCache = new Asap_Cache_File();
+			$oCache->flush();
+		}
+
+		if ($sWhat == 'apc' || $sWhat == 'all')
+		{
+			if (extension_loaded('apc'))
+			{
+				echo self::_print('Removing APC cache...');
+				$sContents = <<<'EOT'
+<?php
+
+if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
+	die('Bad request.');
+
+require_once('../../vendor/Asap/Core/Asap.php');
+
+Asap_Core_Asap::init();
+$oCache = new Asap_Cache_APC();
+$oCache->flush();
+EOT;
+				$sFile = ASAP_DIR_ROOT . 'web/tools/tmp-clear-cache.php';
+				file_put_contents($sFile, $sContents);
+				$oAsap = $GLOBALS['asap'];
+				$sUrl = $oAsap->getParameter('application.www_root', 'asap') . 'tools/tmp-clear-cache.php';
+				file_get_contents($sUrl);
+				//unlink($sFile);
+			}
+			else
+				echo self::_print('Warning: APC is not loaded');
+		}
+
+		echo self::_print('Done.');
+	}
+
+	protected static function _action_help()
+	{
+		echo self::_print('Usage: php asap command [parameters]');
+		echo self::_print();
+		echo self::_print('Where command is one of the below:');
+		echo self::_print();
+
+		foreach (self::$COMMANDS as $sCmd => $sMsg)
+			echo self::_print(str_pad($sCmd, 16) . ': ' . $sMsg);
+
+		exit;
+	}
+
+
+
+
+	protected static function _commandNotFound($sCmd)
+	{
+		echo self::_print('Command ' . $sCmd . ' not found');
+		echo self::_print();
+		echo self::_print('Please use "php asap help" to get the list of available commands, or "php asap command --help" to get help for one specific command');
+		exit;
+	}
+
+	protected static function _printHeader()
+	{
+		echo self::_print('', '*');
+		echo '*', self::_print('', ' ', self::LINE_LEN - 2, STR_PAD_BOTH, false), '*', PHP_EOL;
+		echo '*', self::_print('Asap v' . ASAP_VERSION . ' Console', ' ', self::LINE_LEN - 2, STR_PAD_BOTH, false), '*', PHP_EOL;
+		echo '*', self::_print('', ' ', self::LINE_LEN - 2, STR_PAD_BOTH, false), '*', PHP_EOL;
+		echo self::_print('', '*');
+		echo self::_print();
+	}
+
+	protected static function _print($sLine = '', $sPad = ' ', $iLen = null, $mWhere = STR_PAD_RIGHT, $bEOL = true)
+	{
+		if ($iLen == null)
+			$iLen = self::LINE_LEN;
+		return str_pad($sLine, $iLen, $sPad, $mWhere) . ($bEOL ? PHP_EOL : '');
+	}
+}
+
+

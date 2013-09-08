@@ -1,0 +1,377 @@
+<style type="text/css">
+	#asapDebugBar
+	{
+		position: fixed;
+		bottom: 0;
+		left: 50%;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		width: 1080px;
+		margin-left: -540px;
+		background: #401580; /* Old browsers */
+		background: -moz-linear-gradient(top,  #401580 0%, #8c3fff 28%, #8c3fff 37%, #55338c 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#401580), color-stop(28%,#8c3fff), color-stop(37%,#8c3fff), color-stop(100%,#55338c)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #401580 0%,#8c3fff 28%,#8c3fff 37%,#55338c 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #401580 0%,#8c3fff 28%,#8c3fff 37%,#55338c 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #401580 0%,#8c3fff 28%,#8c3fff 37%,#55338c 100%); /* IE10+ */
+		background: linear-gradient(top,  #401580 0%,#8c3fff 28%,#8c3fff 37%,#55338c 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#401580', endColorstr='#55338c',GradientType=0 ); /* IE6-9 */
+		color: white;
+		text-shadow: 0 1px black;
+		border-radius: 5px 5px 0 0;
+		border: 2px solid #401580;
+		border-bottom: 0;
+		font-family: "Century Gothic", "Gill Sans MT", Arial, sans-serif;
+		letter-spacing: 1px;
+	}
+
+	#asapDebugBar ul
+	{
+		margin: 0;
+		padding: 0;
+	}
+
+	#asapDebugBar li
+	{
+		display: inline-block;
+		height: 36px;
+		line-height: 36px;
+		border-left: 1px solid #9E5EFF;
+		border-right: 1px solid #401580;
+		vertical-align: middle;
+		font-size: 12px;
+		color: #FFFFFF;
+		text-shadow: 0 1px #401580;
+		padding: 0 10px;
+		margin: 0;
+	}
+
+	#asapDebugBar li[category]:hover, #asapDebugBar li[category].active
+	{
+		cursor: pointer;
+		background: #8c3fff;
+	}
+
+	#asapDebugBar li:first-child
+	{
+		border-left: none;
+	}
+
+	#asapDebugBar li:last-child
+	{
+		border-right: none;
+	}
+
+	#asapDebugBar li#asapVersion
+	{
+		font-size: 16px;
+		color: #401580;
+		text-shadow: 0 1px #9E5EFF;
+	}
+
+	#asapDebugBar .icon
+	{
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		border-radius: 15px;
+		border: 1px outset gray;
+		vertical-align: middle;
+		margin-bottom: 3px;
+		margin-right: 6px;
+	}
+
+	#asapDebugBar .iconImport
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAABJVJREFUSMetlU1oXFUUx//nfrw37828mckk0xBi6NDQUFq1C0XsxoUUFy6KBNy4EI3gIqVNdt25K7gQA9M2i2zsopsg6EKK6OguzVg/ipRa2oIxXbXVMmSmfW+Y9+6Hm7mPfLW48MDlfd7fOed/zr2XsMuWl5cxPz8PAFhaWmJSyuOe5x2JokjHcZwlSZIaY35ZXFz82825cOECzpw5g/2MngVvNpuHPc/7OAiC98IwnAjDkIhosLW1hSRJbvX7/W+zLPuSc/7HwsKCfpYTegZ8LgiCT2q12pTv+2SMISklPM+DUsqmaYokSfDkyZMHcRyvW2uXFhcX1x2r2Wzi7NmzOx2cP3+eqtXq657nfRpF0RsjIyNWa03GGBhjIISAEAJaa6uUImMMtNZI0xRPnz7FYDD4zRjzmTHmx4WFhX/yDJaXl2GMecnzvA+KxeJHYRhWPM+z1loCYI0x5BxwzqG13jOMMSbLMpamqdJa31ZKfWWM+YGIbgpr7WtSyo+jKHo/CALJOYcxJodba+GiJSIHzN8ZY6zWmgGAEEIwxl42xhwBUDDGbLLTp0//PDIysklEot/vo9/vI01TbJfBAXeB3ciDyLIMSZJYpZRnjCkT0QNaXV09bq39BsCUtRZuMMbyYa0F53xfiRx4GBSstSAiAOgCeFdYayettTVrLQA47aGU2tFuvu+DiPZk4zIezgcRufsKEb1CANBqtRqc8187nc5omqbQWmPoDS79ocYY1giuVd23vGuIIKXse5734dzc3KoAgMnJSWOt1ZVKBd1uF1tbW+h2u7k8AHLoEIA4jrfLAWstpJQolUooFot9KeXvAMAAIMsyKKXAGEO5XMaBAwdw7949dDqdXArnhHOOKIrg+34O1lqjUqlgfHwcURSBiChNU5E7UErlRXOFSpIE9+/fR6/XQ6lUAmMMRIQgCMA5x/j4OACgUChgamoKtVoNjLE8IJe5cJG5Ho/jGL1eD0SUFyyKIgghoJQCEUEphTAMMTExsaP427twhwNXVCfFnTt38mJuD4AxBq11fg3DcE9XObhjMgdwEgkh0Gg0YIwBYwyPHj3Cw4cP94Vsf94NdxkwAFhZWaE0TUlrjSzLMDY2hnq9nmewfbvYD7jrP2utzdcRA4DLly/TYDBI3c9KKRw8eBDFYhEzMzOoVqt7tox9MrBDR2SMwfXr1wEAfLg+BleuXPlOSqnL5XJFShn5vi/q9ToKhQKUUna4AUJrDc45pJR5tMPVT4PBILl792773Llz8+vr6zcBKA4AYRiqLMs6N27caLdarTUhxJ9ExBljked54XDLtsNoiXMOIYTTmZRSemNj46dr1641L168+LlS6la9Xh8kSbLzyBwaAxBIKV84evToq8eOHXvr5MmTs77vl7Isg9baFgoFBEFARITHjx8/uHr16hetVms1juO/AMQAzL5n8j4mAFQBHD516tQ7J06ceHt0dHQmDEMPwFa73f760qVLKwBuHzp0qLexsfH8Q/85JgGUAEzPzs6+OT09/eLa2lqr3W5/D6DTaDSyzc1N/B9GAIoAxgAU/suEfwHKHH7S7fWi5AAAAABJRU5ErkJggg==);
+	}
+
+	#asapDebugBar .iconMemory
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAFiQAABYkBbWid+gAABHdJREFUSMfNVV1IHFcU/mZ2s+tkdtcshDRuWNRsCG1sQ1vrT0ygElCxkdD2IZinqEg1D6sbUjD40IeY0gehZSHFRUP9aQPuU8yDBaUUSx5M9GFXrVtqKlmNRVdmZnU36uzMnTt9ccTVNdLQhx4Y5swd7vnO+c797gH+D9bc3LzjNzQ0/LfBvV4vAKCkpMR57dq14wAwPT2987++vv61+5nDAEKhED86Olrndrs7w+EwF4/Hs8vLyy3hcLhdEISe3t7eP163n9270NrauuOPjY1dX1hY+C0vL+/+3NwcZzabcezYsV/y8/OnysrKbtnt9keHJbgPwO/3o6Ki4tzw8HAoFosNRCKRQkVRdFmWQSnVARRJkuQihCwkk8nPDwNIo6ilpcWal5f3TW5u7q3nz5+DEKKfOHGCefHiBSiloJRC0zRsbm5OBAKBUp/PZ7HZbG8JgrAcCATUTACm3R+VlZWnAARfvnyJVCoFRVEYURSh6/oOwDbIqcuXLytVVVU+VVUDa2tr0rNnz55mAjAbTlNTE5aWllbtdvswz/NXdgfd4+ssyzKSJHV4PB5WlmVEo9G/D6JopwKPx2O6cOHChzk5OddFUcyhlOqUUmZ35tvZM8Z7ZmZmwWw2F7e3tz/xer2OM2fOkJmZGT1jk3meb3I4HE/Ly8s/sFgsm6qqMpqm6ZqmgRACTdPSHgD68vJy9uTkZO7Q0NBdt9s9wvN8zYEUEUKmI5EIVFX9AcDdra2tqMViYQyKNE3bSxfDsmy2y+V6dPr0aZvZbIYgCOcBPN53iurq6tDX17dbXFwwGPw1Ho+XMgyTRtHehquqitraWjUWi7XdvHnzOyNGY2MjHjx4sF/JXq/36qVLl+4XFBS4BwYGIEkSKKUwgAgh+0DW19d/HxkZea+zs7NaEIRPlpaW7j18+DCWRpFhiqK8LQiCOxqNiolE4idFUZrtdrvVZDIhKysLi4uLAJAGYrVa321ra5utrq7On5yc5ERRpABaMypZFMXvp6amamtqao53dXXdopSKyWQSLMtCURQ4HA4QQtIaD0Cfm5s7F4/HzQCeKIpyL6OSb9y4gf7+fgDA7du337948eJXHMfVdHd3H3E6nTrLsgzHcVhdXUUqldrXE6vV+nhoaOhT407z+/3pFRjBt6n6IpVKfeZ0Oo+cPHlydm1tjXE6nXoymYTVat05VbsrkSSpprS01GXcaRkpMkyW5fuhUOjnYDB4vqur6yNVVePz8/MMz/M4evQoTCYTCCGglOoGZYQQRdM0PaMOdltjYyN6enoiAK5kZ2dnDQ4Ofjk/Py+Pj49jY2MDLMvCZrPh1atX0HWdUVUVhJBeQoh/ZWVl+V8NHJ/PN1ZVVfWxy+VCR0cHtra2dI7jmEQioadSKUZV1SlK6XVZlv8Kh8PqgUo+yJLJZGh2dvadlZWVbkEQ/gTw48bGhk4ISSiKcndiYuLbN57Hd+7cAQCUlZU5jbXi4uLOkpKSrwsLC93GWlFR0ZsBZBroZ8+eZT0eD7MNdmiMfwDhA7iaJqcZoAAAAABJRU5ErkJggg==);
+	}
+
+	#asapDebugBar .iconTime
+	{
+		background-image: url(data:image/png;base64,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);
+	}
+
+	#asapDebugBar .iconDatabase
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAABMZJREFUSMellk1v28oVhp8ZUqK+KVCGrCSVajlOESBA4JvNRRbZBP4B+QH5FVk3q+5zf0V22XXrAEGQAlk0H4CRBnVTNP6SLck1JVH8ksiZu6ioK8cuuugBDjgzHJwXh+/DIWElPn/+zKtXr/h/4uXLl5fmIht8+/aNra0tAF68eJHvdDpbvu9vBEHQVErZjuMUm82m6TiOsG07yefz0Ww288bj8bnruoe9Xu+fT58+HQPs7u6ys7Pzm8CXL1+4d+8eBwcHVa31n4QQT5IkqQVBYLmumxsOh+Z0OhWO49DtdqnVavi+r13XTafT6Xw2m8VKqSBN078IIf745MmT/Y8fP/LgwYPfOgDY29v7u2mafwAQQmgppQBI05TJZILv+1iWRbYmhMAwDAzDQEqJlBKAIAhuPnr06BTAXBU4ODhoVyoV4jhGKSUALMvCtm3a7TZKKXZ3d9nf38dxHG7evMna2hqVSgXTNLEsS08mE/Hp06cbwFWBKIpmtm0X0zTFtm3W19dZW1ujXC6jlOLk5IRms8nFxQWDwYDhcEi5XKZer9NqtWi1WsLzPJRSaVZT/kiB1pooigjDkKwDAM/zCMOQXC6HbdsUi0U8z+P79+8cHx+zKHyFqh8FrOUNKdFaLzMTn8/nzGYzZrMZSimklJimiRACQC/2Gf9N4K/5fJ5cLnepox9jUexSGIZBoVAQSqlpEAT/ytYveeD7vvH69WtKpRK3b9++JJKRYhgGQoglMVprkiTh9PSUo6MjHMeRm5ub8loBIcRPaZry4cMH3r9/T6VSodls4jgOlmXh+z6np6f0ej3G4zFKKSzLYjqdcn5+zsbGhm40GqWLi4vfA/++IlAqleLHjx8X7t+/j5SSfD6PlBKlFFEUcX5+ThzHRFGEZVmYpkmtVmN9fZ1Op0O32xWe59Hr9dJrOwBQSqGUwrZtut0u7XYbKSWTyYR+v8/x8TFHR0ccHh4yGAyIogjf90mShDRNr5D0o8n5zESlFEmSEEUR8/l8SU9WMAxDZrMZWmuEEAgh0FrrhTfXU5Sm6V4ul1samRG0Os7mWa6uFQoFMZ/PwyiKjq59REEQhG/fvsW2bTqdzpKWVYpWM6MoTVNGoxHv3r2jUCgkd+7cia8VMAzj5yAI2NvbI0kSqtUqrVbrCkUnJyeMRiPSNCWfzzOdThkOh7Tbbd1ut6uu624BH68I2LYd7+zsFLa3t/+jbppLiuI4ZjgcUiwWKZfLAORyueU51Ol02NjYEL7vc3Z2dj1Fo9FINBoNAOr1Opubm9y6dQvDMJhMJpydnXF8fLzMfr9PGIYEQUCSJCilyOVyPHv27ApFEmhqra1VXOfzOXEckyTJkqQ4jvF9H9/3ieP4kvmZV5Zl3ci8l4viBeB3rutq27YvGXjdmbRK0AppulqtEoYhYRg2gTIgM15NIUT65s2bvxUKhW6tVitWq1UajYaoVqtSSkmapgRBgOd5jMfj5fGttVaVSmVWKpXCr1+/njx//vyXyWTyZyACZmLl428urlVga3t7+/bDhw837t69e6NerztKqbLneeZwOKTf76eDwSByXXfked6Z7/uH+/v737TW/wDOpZRaKZUAWvyPvxCxeCuzR5nt14tMAbXIa+NXF1CeeCM/QLMAAAAASUVORK5CYII=);
+	}
+
+	#asapDebugBar .iconFlash
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAA1FJREFUSMetlM1LK1cYxp8zJ/PhJBFyya0K06kummsRBKVQ6MZNERXJXdRC6abl7gTBf6QbV/4BXbixWeRaFdogFGzV24U78QsnNn7EJCST+cqY4zldXJRbbuOd3N53OTPv8zvP+5x3CDpUNptFPp/HwsJCn6IoKuf8rW8IIZAkCYwxsbS09Pd/6cQ6AfL5PACgt7f31eDg4MeSJIEQ8vBeCAHOORhjsCwLAEhXAAAYGxsz0ul0z8jIiHAchyiK8iDOGIPjOMLzPOK67h+dNKTHAIZhPNN1XVNVlcRiMXDOwTmHEAKUUiSTSVIul+E4zov3AiQSiY+SyaTiOA5830cQBAiCAL7vIwxDOI6DUqmUr9fr1szMDLoekaIoT1OpVKzZbML3/X9lkEgkxPHx8W2lUvlpbW0t7KTxKCCVSj1VVVUql8sQQjw8V1VV1Ot1cn5+friysrL6mEbHEY2Pj8uapg212200m014ngfP8+6dkJOTE5yenv7wZs/8/Hx0B4Zh9FBKn/m+D9/3QSl93RCLIQgCNBoNZDKZXCaTIYQQ0m63/1peXv46MkCWZVnTtCe1Wg2e50GSXpullCKdTmNiYgKc80EhhGCMkUKhUOwqg3g8rlJKP2k0GgjDEJRSMMYAAPv7+w+ZDAwMkOvraxwcHHzXVQaapsVkWabxeByGYcA0TZimCdd10Wq10Gq1oOu6YIyhWq1+v729XZqbm4vugDEWHh4eWpIkEQBEVdX06Oio7rouKKWglCKVShHLsl7Ztp2bnZ3F6urbF4ogYi0uLv46NDT01dbWFiilGB4eFpzz9tHR0fNcLrf5Xpt8X9PT0ylZlo3Ly0s0m00oiiIIIeTs7OzPx8TfuWhvbHQP5/xTz/MAQPT395NSqcSKxeLzd/VKEU5/v720Uqmgr6+P3N3dwbbtFzs7O3anf1BkwMbGBiRJ+oxSilarJUzTxNXV1e++7/+czWaxvr6O/z0iIcSXYRgik8ng5uamVa/XfywUCn6UXiki4Atd1xGGIbm4uFgrFAovo96+SIB2u/05ABSLxVvbtr8BgKmpKXxIB+lqtYogCL7d29sDAGxubn44gOu61LKs31zX/WVychLdVKSQOedmrVazd3d3b9Fl/QMYAZKB1RGL1wAAAABJRU5ErkJggg==);
+	}
+
+	#asapDebugBar .iconConfig
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAACYQAAAmEBwTBV+gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAARkSURBVDiNhVTPa1RXFP7ur/deRhjnJczUkMaUdjYVpsYuLJTuNAFX/gdCpRZChZQUJqWGWYgJRBoyoSNoV9nYtZsuTKiuJphKA00gUGzBRjORYWaSPOcl79e9twt9j8wo9cHh/bjvfOc75zvnEK013nXdvXv3p+PHj39KCCHNZvP3S5cufftOJ631/1qxWCSPHj3yXdfVruvq1dVVv1gsknf50e5A5XL560qlUozfOecfZTIZzhgDYwzpdJpzzvPx+eLiYunOnTvfdOOQo6WoVCpzo6Oj44Zh0MePH//a19d30rbtU/l8nh912trakrVabcP3/frp06dHwjDU9+/fXxgbG5t4A3hmZubyxYsXf87lcowQAsYY4jNCyFtLGN+VUqjX6/LevXtfXbt2bREAEiY9PT19SikahiE459BagxAC3/c7ggCAlBKmaSb1jKIIURTRVCqVfWspbt++vXzhwoXzjDEYhoH9/X1EUQTTNDuYep4HSikymQyUUvA8D0tLS7+NjY2dT7Q5mh5j7L0oiqCUguM4ME0TlmV1pA4AQggopbC3twfLsnB4eAghRPYoFtFaY3JykkgpB0dHR/8ZGhriAHB4eAjTNGGaJur1umo2m3UAyGQyuWw2S5VSCMMQAOB5HprNZlitVj8MgmB7dnZWk3K5PJ3P578TQoj+/n7KGINSClJKMMawu7urHj58+HmpVFoFgOvXr382MjKykslkqOd5CIIg1giNRkNFURQ+efJknvq+f6q3t9e0bZtGUQQpZaK01hrPnj2rxaAAUCqVVnd2dnbCMMTBwQGklDAMA4QQ2LZNbds2Xdf9OEnptbKQUoIQAqVUDB51t5rv+9J1XRwcHCCVSkEIASllgqG1Bo2iaK3VaoWO46j4AEASZHBw8OSNGzeGY9Dp6ekz2Wz2/RjUsqwEcH9/XzUajTAMwz8S8TjnJ8+ePft3LpfjlmVBSgkpJYQQ8H1fPX/+/F+tNTlx4sSQZVlEKQXLskApRRAEqNfrUbVazUdRtDU7O6u7+3i9UCgUOOc4duwY2u02KKWQUiaCxiwJIRBCoN1uIwxDrK+vb1y5cuWTGKtjCbXb7W1KafwMIQQ8z4PjOACAdDoN0zQhhEA6nYYQAowxUErhOE7tjT4GgLm5uYlCofCjYRgk3hWGYaCnpyf5mVIKznkyIMCr8XZdFy9fvtQbGxvfX7169WbH5GmtdwkhKpVKMc45KKUJG0JIYgAQhmHH7n3dFUpK2XiDMQDMz8/PDA8PFw3DoE+fPl3inNsDAwNnent7BfBqy2mt0Wq1whcvXvwZBEErn8+P+L6v1tbWbo6Pj/+AI0w7bGFh4ctbt25NvA5IpqamPqhWq3Jzc1Nvbm7qlZUVOTU1lY9JVSqViXK5fLkbp4NxR/EJSQGwGWP28vLy2sDAgACAWq0Wnjt37gullANgD0BLax10+/PuD0exAWgpJR48ePBLf3//Ka012d7e/ksppQFEAAIA8m3O/wFXFMSscJy9fgAAAABJRU5ErkJggg==);
+	}
+
+	#asapDebugBar .iconCache
+	{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAFiQAABYkBbWid+gAAAAd0SU1FB9wBGBQHEEg8rTsAAASsSURBVEjHzVZdaBRXFP7uZGY26+yPm7SpiSxZmSCtaaE/JJpgbRCMgrHQQC0i1iixCUg0Yh9CHvpgHyr4IILKkkg1aR/MU/Ky0EopKYGozcPmh2xpgrqLSdc1O7OLa3d2fu7cPjS7JO6avPShF4Y5M8O53znfOfc7A/wfVnd3d8E+ffr0f7t5T08PAGD37t2+o0ePvgEAs7Ozhe+nTp3a0J9sBhAOh6V79+51+P3+K9PT085UKuVtaWkRp6en+5PJ5ODt27f/2Mife/XF+fPnC/b4+PixWCz2WyAQuL6wsODkeR5bt279ZceOHTPNzc0X3G736GYBFgFcu3YNBw4c2BUKhcKJRGI4Eol8ZBgGy+VysG2bAWhQVbXGsqxYJpNp3wxgHUXnzp1zBAKB72pray8sLi7CsixWVVVFnjx5Atu2Yds2KKXIZrO/B4PBPb29vaLL5XormUzGg8GgWQqgbO1Da2vrdgAjT58+ha7rMAyDKIoCxlgBYBVk+/79+42DBw/2mqYZTKfT6sOHDx+UAuDzRldXF5aWlp673e6QJEmH1276is04jiOqqn4ryzKXy+UQjUaXX0dRIQNZlsuampo+rK6uPqYoSrVt28y2bbI28tXoSf4+NzcX43m+sb+/f6Knp8dTV1dnzc3NsZJFliSpy+PxPGhpaflAFMWsaZqEUsoopbAsC5TSdRcAFo/HvVNTU7VjY2OX/H7/z5Iktb2WIsuyZiORCEzT/B7AJU3ToqIokjxFlNJ1haaUEsaYt7Kycszn80l+vx+xWOzj1tbWMMdxEEVRF0XxOQGAjo4O3LlzZ+3hco6MjPyaSqX2EEJepQhOpxOyLIPn+ZK8r9ZFTyQSMikhDZ/u3bv3en19vX94eBiqqsK2beSBdF1HIBBAe3s7HA5Hcd8TAlVVWSgUIgsLC+8WhWAYxtvJZNIfjUaVFy9e/GgYRrfb7XaUlZWhvLwc0WgU2WwWFRUVcDqdJQE0TSOrB5MUASiKcmNmZiZ29uzZEcYYOXHixOeZTKamoqIChmFAkiRomgaXywWPx1MsDRyHWCyGXC4HQgjWAZw8eRJDQ0N/Axi5ePHi+6Ojo98cP378zYGBAfA8zziOI4IgQNd1iKIIURRLZsDzPAzDWN9FADA0NLSWqq90Xf+spqYG27Ztm08kEvWyLLN4PE4IIXj8+DECgQBs2y7KYHl5Od/Kr5frM2fO7PL5fFdM0+y7evXq4pEjR/4SBMFXWVkJSikEQYAgCNi3b1/BR9d1bNmyBePj48hkMkin0++V7LPOzk4MDg5GABz2er3ld+/e/frRo0e5+/fvQ9M0cBwHh8MBSZJw6NAhUEqhaRpu3ryJzs5OTExMwLKsYory69atW2sn1k9er/eTtrY2hMNhpNNp5vF4SC6XgyAIUFU1r7BYWVmBoijQNA2WZRUXudTKZDLh+fn5d549ezaQTCb/5Hn+B6fTCdu2wfM8VlZWCvLR0NAAwzCgaVq+BtaGI7Ovrw+XL19Gc3Ozb3JyMgUATU1NN6qqqr7gOM5BCFlyuVyEMZYvsA0g8PLlS4FSGmKMfblh9KUG+s6dOzlZ/lcBGhsbN/1p+Acl2YEe9+YTjQAAAABJRU5ErkJggg==);
+	}
+
+	#asapDebugBar .asapDebugBarInfoCat
+	{
+		display: none;
+	}
+
+	#asapDebugBar #asapDebugBarInfo
+	{
+		display: none;
+		position: absolute;
+		bottom: 38px;
+		left: 30px;
+		width: 1020px;
+		color: black;
+		text-shadow: 0 1px #9E5EFF;
+		padding-top: 26px;
+	}
+
+	#asapDebugBar #asapDebugBarInfo #asapDebugBarInfoContainer
+	{
+		background: #8c3fff;
+		border-radius: 5px 0 0 0;
+		border: 1px solid #401580;
+		border-bottom: 0;
+		overflow: auto;
+		height: 280px;
+		padding: 10px;
+	}
+
+	#asapDebugBar #asapDebugBarInfo #asapDebugBarInfoClose
+	{
+		position: absolute;
+		top: 2px;
+		right: 0;
+		width: 30px;
+		height: 24px;
+		background: #8c3fff;
+		border-radius: 5px 5px 0 0;
+		border: 1px solid #401580;
+		border-bottom: 0;
+		z-index: 2;
+		cursor: pointer;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAwCAYAAAAYX/pXAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAN1wAADdcBQiibeAAAAAd0SU1FB9wBGBU0JnIvN6UAAAQCSURBVEjH7VXPa9tmGH6kSKvkH/IPNXFrKzFJyC9HMAKlwaSNbSg75rIMPHLqoT21h/0lPazsbzA9DKbDLi1z4kACYWOrlxyckTim8aiGZRcnkWXpm7VDZCPHTga7bIy+F316ePXofZ73/b4P+Bj/flDul3Q6zYiimAMATdOym5ub5Ca8j8BJUmRZztA0jWKxmNc0bQ0AhuFdEtq2bdi2DVEUc4lEIiNJEheJRDhZljOiKCqiKCqLi4sZSZK4aDTaxXPd7xi3BEIITNNEqVTC7OwsNz8/nwKASCTCHRwcYGZmBqZp9nnQI9A0LXt4eKgQQjLxeJwrlUqYnJz0AICzRrlcNsrlcl7TtOwAAQDiaFYIIaloNOo5Pj4GRVGQJAknJyf66enplpPTM5HuLkRR7DGZpmmbpomuTsMwQAixh+W6JTCOaWlBEHhVVREIBAAAztprWVYagOKugnGx5gRBSPl8Pr7RaIDneaiqemHbNoLBoLfRaMDr9fKWZaUA5ACsX/UAhBAYhgGaplGr1XRd1wsOnvL7/Z52uw1CyPVdAKA4f4BlWV3DMAS/vgvukU0mkwQAdnd3+3B3F9weQBAEEgqF1nVdx8TEBFRVhW3bWFpaIq1Wa53neQiCgGaziWEVXPUAuq73cL/fj7/zAI7G3rOL3YRTtt2bD2Qymd6QaJqGfD5/Iz5A8E+C/p+diY9uP0MsHAcAVOsVvKm9vBEHgJGrH6/yTzH5yTLqzG8YpeYw5bk/FD/W9/oJHkpfYIV/jMRUCAEfC78uo8EeQeCDeHDrCRamAxBDLLznl/hb7fVgF0zqAoYBFH7fRvSOgGXPBpY9G5iSAii824VhAC3qw3APHt1+BgBMLBzPOVqzX8lfEwB4sf+8DwdAuj649wITC8eVVf5phqYYbOIb5cX+8zUAuIpX65XeieT24NUK//izxFSIC/hYxq/L4w32KCnwwS8f3HqSWZgOcGKIZbzn8niDPfr0rfb61cBuvPRAxI66jXt3HnLL6kYKAKbuBrjCu13cH00OeNCrYJSa+/aMqSZtMzi+KNxjfmpsYSEgs0HOz+7Vt7HkX8Gv2r7xs/5dvlqvfH6s73X6KoiF4+RS2/eKNXKemmFWPT82fwCFEcyxKfzS3NFLFztb1XplLRaOE9SubKZqvdIrq9Vp2obZQgcd2PgTeltHG7o9LHegC3d90+nRzixfZgoYIwkAgLP2tn1naQB9XXBLyInCaCrcifPv6SJ8GEOZ3r6waYIxLHjf00UE6RhvCs3Le6E25F4wLQvn7B+gweDUKupnrQ8FADB5KxVmJY+OOkznaBuQUK1XsrEwlDZppS7J2ltOqRiCZ6/bzn0j+6b2ktyEf4z/SvwFbuFK/R8RbFUAAAAASUVORK5CYII=);
+		background-position: top center;
+		background-repeat: no-repeat;
+	}
+
+	#asapDebugBar #asapDebugBarInfo #asapDebugBarInfoClose:hover
+	{
+		background-position: bottom center;
+	}
+
+	#asapDebugBar table
+	{
+		border-collapse: collapse;
+	}
+
+	#asapDebugBar table td, #asapDebugBar table th
+	{
+		border: 1px solid #9E5EFF;
+		padding: 4px;
+		font-size: 12px;
+		color: black;
+	}
+
+	#asapDebugBar .showBacktrace
+	{
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	#asapDebugBar .showBacktrace:hover
+	{
+		text-decoration: none;
+	}
+
+	#asapDebugBar .backtrace
+	{
+		display: none;
+	}
+
+	#asapDebugBar .xdebug-var-dump
+	{
+		text-shadow: none;
+		background: #CC99FF;
+	}
+
+</style>
+<script type="text/javascript">
+	if (window['$'] == undefined)
+		alert('The ASAP DebugBar needs jQuery');
+	else
+	{
+		var SAsapDebugBar =
+		{
+			debugBar: null,
+			infoDiv: null,
+			currentCat: '',
+
+
+			onReady: function()
+			{
+				SAsapDebugBar.debugBar = $('#asapDebugBar');
+				SAsapDebugBar.infoDiv = $('#asapDebugBarInfo', SAsapDebugBar.debugBar);
+				$('#asapDebugBarInfoClose', SAsapDebugBar.infoDiv).click(SAsapDebugBar.hideInfo);
+				$('.showBacktrace', SAsapDebugBar.debugBar).click(SAsapDebugBar.showBacktrace);
+				$('li[category]', SAsapDebugBar.debugBar).click(SAsapDebugBar.onCatClick);
+			},
+
+			showBacktrace: function()
+			{
+				$('~ .backtrace', this).toggle();
+			},
+
+			onCatClick: function()
+			{
+				SAsapDebugBar.showCategory($(this).attr('category'));
+			},
+
+			showCategory: function(sCategory)
+			{
+				$('li[category]', SAsapDebugBar.debugBar).removeClass('active');
+				if (SAsapDebugBar.currentCat == sCategory)
+					return SAsapDebugBar.hideInfo();
+
+				$('li[category=' + sCategory + ']', SAsapDebugBar.debugBar).addClass('active');
+				$('.asapDebugBarInfoCat', SAsapDebugBar.debugBar).hide();
+				$('#asapDebugBarInfoCat_' + sCategory, SAsapDebugBar.debugBar).show();
+				SAsapDebugBar.infoDiv.slideDown();
+				SAsapDebugBar.currentCat = sCategory;
+			},
+
+			hideInfo: function()
+			{
+				$('li[category]', SAsapDebugBar.debugBar).removeClass('active');
+				SAsapDebugBar.infoDiv.slideUp();
+				SAsapDebugBar.currentCat = '';
+			}
+		};
+
+		$(document).ready(function()
+		{
+			SAsapDebugBar.onReady();
+		});
+	}
+</script>
+{% set allFlash = app.allFlash %}
+{% spaceless %}
+<div id="asapDebugBar">
+	<ul>
+		<li id="asapVersion">ASAP {{ constant('ASAP_VERSION') }}</li>
+		<li category="time"><span class="icon iconTime"></span>Time {{ debugBar.nb('time') }}ms</li>
+		<li category="memory"><span class="icon iconMemory"></span>Memory {{ debugBar.nb('memory') }}Mo</li>
+		<li category="database"><span class="icon iconDatabase"></span>Queries {{ debugBar.nb('database') }}</li>
+		<li category="imports"><span class="icon iconImport"></span>Imports {{ debugBar.nb('imports') }}</li>
+		<li category="flash"><span class="icon iconFlash"></span>Flash {{ allFlash|length }}</li>
+		<li category="cache"><span class="icon iconCache"></span>Cache {{ debugBar.nb('cache') }}</li>
+		<li category="config"><span class="icon iconConfig"></span>Config</li>
+	</ul>
+	<div id="asapDebugBarInfo">
+		<div id="asapDebugBarInfoClose" title="Close information panel"></div>
+		<div id="asapDebugBarInfoContainer">
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_time">
+				Page execution time (PHP) : {{ debugBar.nb('time') }}ms
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_memory">
+				{% set tmp = debugBar.info('memory') %}
+				Current memory usage : {{ tmp.current }}Mo<br />
+				Max memory usage : {{ tmp.max }}Mo
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_database">
+				{% set tmp = debugBar.info('database') %}
+				Amount of queries : {{ debugBar.nb('database') }}<br /><br />
+				<table>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Query</th>
+							<th>Params</th>
+							<th>Begin</th>
+							<th>Duration</th>
+							<th>Backtrace</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for idx, query in tmp %}
+						<tr>
+							<th>{{ idx + 1 }}</th>
+							<td>{{ query.query }}</td>
+							<td>{% for key, val in query.params %}{{ key }} = {{ val }}<br />{% endfor %}</td>
+							<td>{{ query.time }}ms</td>
+							<td>{{ query.duration }}ms</td>
+							<td><span class="showBacktrace">Show backtrace</span><br /><span class="backtrace">{% debug query.backtrace %}</span></td>
+						</tr>
+					{% else %}
+						<tr><td colspan="6">No queries</td></tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_imports">
+				Amount of included/required files : {{ debugBar.nb('imports') }}<br /><br />
+				{% for val in debugBar.info('imports') %}
+					{{ val }}<br />
+				{% endfor %}
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_flash">
+				Amount of flash variables : {{ allFlash|length }}<br /><br />
+				{% for key, val in allFlash %}
+					{{ key }} = {{ val }}<br />
+				{% endfor %}
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_config">
+				env : <b>{{ asap.environment }}</b><br />
+				debug : <b>{{ asap.debug ? 'active' : 'inactive' }}</b><br />
+				<br />
+				Config :
+				{% debug asap.conf %}
+			</div>
+			<div class="asapDebugBarInfoCat" id="asapDebugBarInfoCat_cache">
+				{% set tmp = debugBar.info('cache') %}
+				Amount of keys : {{ debugBar.nb('cache') }}<br />
+				{% set iTotal = 0 %}
+				{% for type, typeCache in tmp %}
+					{% for key, nb in typeCache %}
+						{% set iTotal = iTotal + nb %}
+					{% endfor %}
+				{% endfor %}
+				Total amount of access : {{ iTotal }}<br />
+				<br />
+				<table>
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>Key</th>
+							<th>Access</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for type, typeCache in tmp %}
+						{% for key, nb in typeCache %}
+							<tr>
+								<td>{{ type }}</td>
+								<td>{{ key }}</td>
+								<td>{{ nb }}</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr><td colspan="6">No cache access</td></tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endspaceless %}

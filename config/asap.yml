@@ -1,0 +1,108 @@
+asap:
+    application:
+        title: Your Asap application
+        environment: prod
+        www_root: http://your-www-root-here/ # used for CLI only
+        cache_prefix: ~
+    autoload:
+        asap: true
+        app: true
+    session:
+        autostart: false
+        name: ~
+        cookie_domain: ~
+    debug: false
+    debug_bar: false
+    debug_cache: false
+    cache: true
+    cache_prefix: false
+    app_classes_cache:
+        model: false
+        controller: false
+        lib: []
+    controller:
+        default: main
+        before_action: init
+    view:
+        mobile: false
+        cache: true
+        default_engine: twig
+        engines:
+            php:
+                naming: "{controller}/{action}"
+                extension: ".php"
+            html:
+                naming: "{controller}/{action}"
+                extension: ".html"
+                variables: "{.}"
+            twig:
+                naming: "{controller}/{action}"
+                extension: ".twig"
+                autoescape: true
+                register_globals: true
+                extensions:
+                    - Debug
+                    - I18n
+                    - Text
+                globals: {}
+            json:
+                naming: ''
+                extension: ''
+        packager:
+            js:
+                type: js
+                active: false
+                minify: true
+                name: packer
+                version: 1.0
+                folder: null
+                files: '*'
+            css:
+                type: css
+                active: false
+                minify: true
+                name: packer
+                version: 1.0
+                folder: null
+                files: '*'
+        cdn:
+            active: false
+            use: ~
+            list: {}
+    databases:
+        main:
+            driver: mysql
+            host: localhost
+            port: ~
+            db: base
+            user: username
+            password: secret
+            charset: utf8
+    i18n:
+        languages: [en]
+        default_language: en
+        host: http://{language}.{variable1}.{variable2}.host.com/
+        active: false
+        method: array # array / gettext / database
+        fallback: en_US # if supported by method (for array / database)
+        domain: messages
+        files: '%domain%.%locale%'
+        database:
+            id: main
+            table: i18n
+    mailer:
+        active: true
+        debug: true
+        overwrite_to: ~
+        host: smtp.gmail.com
+        port: 465
+        encryption: ssl
+        user: your_user
+        password: your_password
+        default_sender:
+            email: admin@your_site.com
+            label: admin your site
+        db:
+            active: false
+            table: ~
+            batch: 50
