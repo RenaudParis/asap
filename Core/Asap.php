@@ -4,7 +4,7 @@
  */
 
 
-$sPath = str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../../')) . '/';
+$sPath = str_replace('\\', '/', getcwd()) . '/';
 
 define('ASAP_VERSION', '0.1.1a');
 define('ASAP_DIR_ROOT', $sPath);
@@ -1115,8 +1115,9 @@ final class Asap_Core_Asap
 			return true;
 		}
 
-		return false;
+		//var_dump(ASAP_DIR_VENDOR);
 		//throw new Exception('Class ' . $sClass . ' not found in ASAP !');
+		return false;
 	}
 
 	/**
